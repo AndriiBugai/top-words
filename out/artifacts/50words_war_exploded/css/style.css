@@ -1,0 +1,82 @@
+
+.inputFile {
+    margin: 0 auto;
+    width: 200px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+
+
+}
+
+table {
+    width: 40% !important;
+    margin: auto;
+}
+
+.header {
+    background-color: #5cb85c;
+    padding-bottom: 6px;
+    padding-top: 6px;
+    padding-left: 10%;
+    color: #004600;
+    font-size: 30px;
+    font-family: serif;
+    font-weight: bold;
+
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 400px;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    cursor: inherit;
+    display: block;
+}
+
+.outer{
+    position: relative;
+    width: 10%;
+    margin: 20px auto;
+
+}
+
+.btn-group-wrap {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 16px;
+}
+div.btn-group {
+    padding-top: 10px;
+    margin: 0 auto;
+    text-align: center;
+    width: inherit;
+    display: inline-block;
+}
+
+a {
+    float: left;
+}
+
+.word {
+    font-weight: bold;
+}
+
+span {
+    font-weight: bold;
+}
+
