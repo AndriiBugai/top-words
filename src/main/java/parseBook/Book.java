@@ -118,6 +118,29 @@ public abstract class Book {
 
 
         Language lang = Language.UKRAINIAN;
+
+        switch (language) {
+            case "ukr": lang = Language.UKRAINIAN;
+                        break;
+            case "chi": lang = Language.CHINESE_SIMPLIFIED;
+                        break;
+            case "spa": lang = Language.SPANISH;
+                         break;
+            case "hin": lang = Language.HINDI;
+                        break;
+            case "ara": lang = Language.ARABIC;
+                        break;
+            case "rus": lang = Language.RUSSIAN;
+                        break;
+            case "jap": lang = Language.JAPANESE;
+                        break;
+            case "ger": lang = Language.GERMAN;
+                         break;
+            case "fre": lang = Language.FRENCH;
+                        break;
+        }
+
+
         if(language.equals("rus")) {
             lang = Language.RUSSIAN;
         } else if(language.equals("ger")) {
