@@ -18,7 +18,7 @@ function sendFile(contents) {
 
 }
 
-function radioChanged() {
+function sendLevel() {
     var radios = document.getElementsByName('level');
     var level;
 
@@ -32,6 +32,25 @@ function radioChanged() {
     var request = new XMLHttpRequest();
     request.open('POST', 'http://localhost:8081/rest/level',false);
     request.send(level);
+    console.log(request.status);
+    return request;
+
+}
+
+function sendLanguage() {
+    var radios = document.getElementsByName('lang');
+    var lang;
+
+    for (var i = 0, length = radios.length; i < length; i++) {
+        if (radios[i].checked) {
+            // do whatever you want with the checked radio
+            lang = radios[i].getAttribute("value");
+        }
+    }
+
+    var request = new XMLHttpRequest();
+    request.open('POST', 'http://localhost:8081/rest/lang',false);
+    request.send(lang);
     console.log(request.status);
     return request;
 
@@ -76,7 +95,8 @@ function readSingleFile(e) {
     reader.onload = function(e) {
         var contents = e.target.result;
         sendFile(contents);
-        radioChanged();
+        sendLanguage();
+        sendLevel();
         httpGet();
     };
     reader.readAsText(file);

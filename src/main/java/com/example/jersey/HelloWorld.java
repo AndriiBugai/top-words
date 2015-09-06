@@ -19,6 +19,7 @@ public class HelloWorld {
     static String text;
     static String level;
     static String format;
+    static String language;
 
 
     @GET
@@ -39,7 +40,7 @@ public class HelloWorld {
         } else {
             book = new TXTBook(text, lexicon);
         }
-        String json = book.getJsonTranslation();
+        String json = book.getJsonTranslation(language);
         return json;
     }
 
@@ -75,12 +76,13 @@ public class HelloWorld {
 
 
     @POST
-    @Path("/sendtest/")
+    @Path("/lang/")
 //    @Consumes(MediaType.APPLICATION_XML)
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response sendtest(String text) {
+    public Response language(String text) {
     //    System.out.println(text);
+        language = text;
         return Response.status(201).entity("hello").build();
     }
 

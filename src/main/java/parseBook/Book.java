@@ -108,26 +108,36 @@ public abstract class Book {
 
     }
 
-    public void translate()  {
+    public void translate(String language)  {
 //        TreeMap<String, String> dictionary = new TreeMap<String, String>();
 
         String[] array = getArrayOfWords();
         String[] translatedText = new String[1];
-//            Translate.setClientId("69063100words");
-//            Translate.setClientSecret("x8LVUEDcJINuNaOdY7w4uVtd1/FzK2S599HgL1ZD99s=");
+            Translate.setClientId("69063100words");
+            Translate.setClientSecret("x8LVUEDcJINuNaOdY7w4uVtd1/FzK2S599HgL1ZD99s=");
+
+
+        Language lang = Language.UKRAINIAN;
+        if(language.equals("rus")) {
+            lang = Language.RUSSIAN;
+        } else if(language.equals("ger")) {
+            lang = Language.GERMAN;
+        } else if(language.equals("fre")) {
+            lang = Language.FRENCH;
+        }
+
 
         try {
-//                translatedText = Translate.execute(array, Language.ENGLISH, Language.RUSSIAN);
+                translatedText = Translate.execute(array, Language.ENGLISH, lang);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         for(int i = 0; i < array.length; i++) {
-//            dictionary.put(array[i], translatedText[i]);
-//            dictionary.put(array[i], "translation");
-            popularWords.get(i).setTranslation("translation");
-//            popularWords.get(i).setTranslation(translatedText[i]);
+
+ //           popularWords.get(i).setTranslation("translation");
+            popularWords.get(i).setTranslation(translatedText[i]);
         }
     }
 
@@ -170,7 +180,7 @@ public abstract class Book {
         return string;
     }
 
-    public String getJsonTranslation() {
+    public String getJsonTranslation(String language) {
         parse(input);
         try{
             findWords();
@@ -180,7 +190,7 @@ public abstract class Book {
         deleteEasyWords(lexicon.getEasyWords());
         deleteUncoventionalWords(lexicon.getEnglishLexicon());
         findPopularWords();
-        translate();
+        translate(language);
         findDefinitions(lexicon.getDefinitions());
         String json = toJSON();
         return json;
