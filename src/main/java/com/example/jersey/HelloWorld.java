@@ -20,6 +20,7 @@ public class HelloWorld {
     static String level;
     static String format;
     static String language;
+    static String bookLanguage;
 
 
     @GET
@@ -41,7 +42,16 @@ public class HelloWorld {
             book = new TXTBook(text, lexicon);
         }
         String json = book.getJsonTranslation(language);
+        bookLanguage = book.getTextLanguage();
+
         return json;
+    }
+
+    @GET
+    @Path("/bookLanguage")
+    @Produces("text/html")
+    public String getLanguage() {
+        return bookLanguage;
     }
 
     @POST

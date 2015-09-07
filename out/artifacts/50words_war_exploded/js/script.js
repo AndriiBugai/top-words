@@ -3,7 +3,7 @@
  */
 function clearFilePath() {
     document.getElementById("file-input").value = "";
-    console.log("Changed path to " +  document.getElementById("file-input").value);
+ //   console.log("Changed path to " +  document.getElementById("file-input").value);
 
 }
 
@@ -12,7 +12,7 @@ function sendFile(contents) {
     request.open('POST', 'http://localhost:8081/rest/send',false);
     request.send(contents);
 
-    console.log(request.status);
+ //   console.log(request.status);
 
     return request;
 
@@ -32,7 +32,7 @@ function sendLevel() {
     var request = new XMLHttpRequest();
     request.open('POST', 'http://localhost:8081/rest/level',false);
     request.send(level);
-    console.log(request.status);
+ //   console.log(request.status);
     return request;
 
 }
@@ -51,7 +51,7 @@ function sendLanguage() {
     var request = new XMLHttpRequest();
     request.open('POST', 'http://localhost:8081/rest/lang',false);
     request.send(lang);
-    console.log(request.status);
+ //   console.log(request.status);
     return request;
 
 }
@@ -60,7 +60,7 @@ function findFormat(fileName) {
     var length = fileName.length;
     var format = fileName.substring(length-3, length);
 
-    console.log( "Format " + format);
+//    console.log( "Format " + format);
 
     if(format != "fb2" && format != "txt" && format != "pdf") {
         return "formatError";
@@ -75,13 +75,13 @@ function findFormat(fileName) {
 }
 
 function readSingleFile(e) {
-    console.log("path " + document.getElementById("file-input").value);
+ //   console.log("path " + document.getElementById("file-input").value);
     if(document.getElementById("file-input").value == "") {
         return;
     }
 
     var format = findFormat(document.getElementById("file-input").value);
-    console.log(format);
+ //   console.log(format);
     if(format == "formatError") {
         alert("File format error \n50 words works with .fb2 and .txt ebooks");
         return;
@@ -98,6 +98,7 @@ function readSingleFile(e) {
         sendLanguage();
         sendLevel();
         httpGet();
+        getBookLang();
     };
     reader.readAsText(file);
     clearFilePath();
@@ -117,9 +118,19 @@ function httpGet()
     xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
     xmlHttp.send( null );
     var item = document.getElementById("text");
-    console.log(xmlHttp.responseText)
+ //   console.log(xmlHttp.responseText)
     var arr = JSON.parse(xmlHttp.responseText);
     tableCreate(arr);
+}
+
+function getBookLang()
+{
+    var theUrl = "http://localhost:8081/rest/bookLanguage";
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+    var item = document.getElementsByClassName("bookLang")[0];
+    item.innerHTML = "The book is written in " + xmlHttp.responseText;
 }
 
 function deleteRows() {
@@ -142,15 +153,18 @@ function tableCreate(array) {
     header2.innerHTML = "Translation";
     var header3 = document.createElement('th')
     header3.innerHTML = "Frequency";
-    var header4 = document.createElement('th')
-    header4.innerHTML = "Definition";
 
     headerRow.appendChild(header1);
     headerRow.appendChild(header2);
     headerRow.appendChild(header3);
-    headerRow.appendChild(header4);
-    thead.appendChild(headerRow);
 
+    if(array[0].definition != "null") {
+        var header4 = document.createElement('th')
+        header4.innerHTML = "Definition";
+        headerRow.appendChild(header4);
+    }
+
+    thead.appendChild(headerRow);
 
     for(var i = 0; i < array.length; i++) {
         var row = document.createElement('tr');
@@ -161,13 +175,20 @@ function tableCreate(array) {
         translation_td.innerHTML = array[i].value;
         var frequency_td = document.createElement('td');
         frequency_td.innerHTML = array[i].frequency;
-        var definition_td = document.createElement('td');
-        definition_td.innerHTML = formatDefinition(array[i].definition);
 
         row.appendChild(word_td);
         row.appendChild(translation_td);
         row.appendChild(frequency_td);
-        row.appendChild(definition_td);
+
+  //      console.log(array[i].definition);
+
+
+        if(array[i].definition != "null") {
+            var definition_td = document.createElement('td');
+            definition_td.innerHTML = formatDefinition(array[i].definition);
+            row.appendChild(definition_td);
+        }
+
         tbody.appendChild(row);
     }
 }
@@ -195,12 +216,10 @@ function formatDefinition(text) {
         var end = text2.indexOf("#", begin + 1);
 
         text2 = text2.substring(0,begin) + "<span>" + text2.substring(begin + 1,end) + "</span>" +text2.substring(end + 1,text2.length) ;
-        console.log("add span" + begin + " " + end)
+  //      console.log("add span" + begin + " " + end)
   //  }
 
    // console.log(text2);
-
-
 
     return text2;
 }

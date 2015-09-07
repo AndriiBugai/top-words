@@ -65,8 +65,6 @@ public class EnglishLexicon {
                     break;
                 }
             }
-            System.out.println(referenceStart + " " + referenceEnd + " " + def);
-
             String reference = def.substring(referenceStart, referenceEnd);
             def = def + " <br>" + "#" + reference + "#" + " - " + definitions.get(reference) ;
         }

@@ -1,13 +1,11 @@
 package parseBook;
 
+import com.memetix.mst.detect.Detect;
 import com.memetix.mst.language.Language;
 import com.memetix.mst.translate.Translate;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
-import parseBook.Word;
-
-import static parseBook.fb2Parser.translate;
 
 /**
  * Created by strapper on 02.09.15.
@@ -15,12 +13,15 @@ import static parseBook.fb2Parser.translate;
 public abstract class Book {
 
     private String notValidBook = "{ \"error\": \"notValidBook\" }";
-    private int numberOfWordsToTranslate = 25;
+    private int numberOfWordsToTranslate = 10;
     private String input;
     private String text;
     private ArrayList<String> allWords;
     private ArrayList<Word> popularWords;
     private EnglishLexicon lexicon;
+
+    private String textLanguage;
+    private String textLanguageName;
 
 
     public abstract void parse(String input);
@@ -30,9 +31,15 @@ public abstract class Book {
         popularWords = new ArrayList<Word>();
         this.lexicon = lexicon;
         this.input = input;
+
+    }
+
+    public String getTextLanguage() {
+        return textLanguageName;
     }
 
     public void findWords() throws Exception {
+    //    System.out.println(text);
         ArrayList<String> words = new ArrayList<String>();
         String[] array = text.split(" ");
             for(String element: array) {
@@ -47,6 +54,7 @@ public abstract class Book {
         if(words.size() < 80) {
             throw new Exception();
         }
+
         allWords = words;
     }
 
@@ -108,57 +116,41 @@ public abstract class Book {
 
     }
 
-    public void translate(String language)  {
-//        TreeMap<String, String> dictionary = new TreeMap<String, String>();
+    public void findBookLanguage() {
+        Detect.setClientId("69063100words");
+        Detect.setClientSecret("x8LVUEDcJINuNaOdY7w4uVtd1/FzK2S599HgL1ZD99s=");
 
+        //Detect returns a Language Enum representing the language code
+        try {
+            Language detectedLanguage1 = Detect.execute(allWords.get(1) + " " + allWords.get(2) + allWords.get(3));
+            textLanguageName = detectedLanguage1.getName(Language.ENGLISH);
+            textLanguage = detectedLanguage1.toString();
+//            System.out.println(textLanguage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void translate(String outputLanguage)  {
         String[] array = getArrayOfWords();
         String[] translatedText = new String[1];
             Translate.setClientId("69063100words");
             Translate.setClientSecret("x8LVUEDcJINuNaOdY7w4uVtd1/FzK2S599HgL1ZD99s=");
 
+//        Language lang = Language.UKRAINIAN;
 
-        Language lang = Language.UKRAINIAN;
-
-        switch (language) {
-            case "ukr": lang = Language.UKRAINIAN;
-                        break;
-            case "chi": lang = Language.CHINESE_SIMPLIFIED;
-                        break;
-            case "spa": lang = Language.SPANISH;
-                         break;
-            case "hin": lang = Language.HINDI;
-                        break;
-            case "ara": lang = Language.ARABIC;
-                        break;
-            case "rus": lang = Language.RUSSIAN;
-                        break;
-            case "jap": lang = Language.JAPANESE;
-                        break;
-            case "ger": lang = Language.GERMAN;
-                         break;
-            case "fre": lang = Language.FRENCH;
-                        break;
-        }
-
-
-        if(language.equals("rus")) {
-            lang = Language.RUSSIAN;
-        } else if(language.equals("ger")) {
-            lang = Language.GERMAN;
-        } else if(language.equals("fre")) {
-            lang = Language.FRENCH;
-        }
-
+        Language langInput = Language.fromString(textLanguage);
+        Language langOutput = Language.fromString(outputLanguage);
+        System.out.println(textLanguage + "    " + outputLanguage);
 
         try {
-                translatedText = Translate.execute(array, Language.ENGLISH, lang);
+            translatedText = Translate.execute(array, langInput, langOutput);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         for(int i = 0; i < array.length; i++) {
-
  //           popularWords.get(i).setTranslation("translation");
             popularWords.get(i).setTranslation(translatedText[i]);
         }
@@ -192,10 +184,10 @@ public abstract class Book {
             String key = item.getText();
             String value = item.getTranslation();
             int frequency = item.getFrequency();
-            String defintion = item.getDefinition();
+            String definition = item.getDefinition();
 
+            string += " {\"key\":\"" + key + "\",\"value\":\"" + value + "\",\"frequency\":\"" +frequency+"\" , \"definition\" : \"" + definition + "\"},";
 
-            string += " { \"key\" : \"" + key + "\" , \"value\" : \"" + value + "\" , \"frequency\" : \"" + frequency +  "\" , \"definition\" : \" " +  defintion +" \" },";
         }
         string = string.substring(0, string.length() - 1);
         string += "]";
@@ -203,18 +195,26 @@ public abstract class Book {
         return string;
     }
 
-    public String getJsonTranslation(String language) {
+    public String getJsonTranslation(String lang) {
         parse(input);
         try{
             findWords();
         } catch (Exception e) {
             return notValidBook;
         }
-        deleteEasyWords(lexicon.getEasyWords());
-        deleteUncoventionalWords(lexicon.getEnglishLexicon());
+        findBookLanguage();
+
+        if(textLanguage.equals("en")) {
+            deleteEasyWords(lexicon.getEasyWords());
+            deleteUncoventionalWords(lexicon.getEnglishLexicon());
+        }
+
         findPopularWords();
-        translate(language);
-        findDefinitions(lexicon.getDefinitions());
+        translate(lang);
+
+        if(textLanguage.equals("en")) {
+            findDefinitions(lexicon.getDefinitions());
+        }
         String json = toJSON();
         return json;
     }
