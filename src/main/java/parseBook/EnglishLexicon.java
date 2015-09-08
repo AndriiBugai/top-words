@@ -24,12 +24,8 @@ public class EnglishLexicon {
     final String fileOfDict = "http://localhost:8081/dictionary.txt";
 
 
-    public EnglishLexicon(String level) {
-        if(level.equals("Intermediate")) {
-            loadEasyWords(fileForIntermediate);
-        } else {
-            loadEasyWords(fileForBeginner);
-        }
+    public EnglishLexicon() {
+        loadEasyWords(fileForIntermediate);
         loadLexicon(fileOfEnglishLexicon);
         loadDefinitionDict(fileOfDict);
     }
@@ -68,6 +64,11 @@ public class EnglishLexicon {
             String reference = def.substring(referenceStart, referenceEnd);
             def = def + " <br>" + "#" + reference + "#" + " - " + definitions.get(reference) ;
         }
+
+        if(def == null) {
+            def = "No definition found for this word";
+        }
+
         return def;
     }
 

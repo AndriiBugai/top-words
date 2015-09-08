@@ -8,6 +8,7 @@ import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayInputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 
@@ -16,18 +17,19 @@ import java.util.ArrayList;
  */
 public class FB2Book extends Book {
 
-    public FB2Book(String input, EnglishLexicon lexicon) {
+    public FB2Book(byte[] input, EnglishLexicon lexicon) {
         super(input, lexicon);
     }
 
     @Override
-    public void parse(String xmlString) {
+    public void parse(byte[] xmlString) {
         {
             ArrayList<String> list = new ArrayList<String>();
             String text= "";
             try {
 //            File fXmlFile = new File(bookTitle);
-                InputSource is = new InputSource(new StringReader(xmlString));
+                ByteArrayInputStream byteStream = new ByteArrayInputStream(xmlString);
+                InputSource is = new InputSource(byteStream);
                 DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
                 Document doc = dBuilder.parse(is);

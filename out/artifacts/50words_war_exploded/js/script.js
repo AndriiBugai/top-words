@@ -18,24 +18,7 @@ function sendFile(contents) {
 
 }
 
-function sendLevel() {
-    var radios = document.getElementsByName('level');
-    var level;
 
-    for (var i = 0, length = radios.length; i < length; i++) {
-        if (radios[i].checked) {
-            // do whatever you want with the checked radio
-            level = radios[i].getAttribute("value");
-        }
-    }
-
-    var request = new XMLHttpRequest();
-    request.open('POST', 'http://localhost:8081/rest/level',false);
-    request.send(level);
- //   console.log(request.status);
-    return request;
-
-}
 
 function sendLanguage() {
     var radios = document.getElementsByName('lang');
@@ -92,15 +75,17 @@ function readSingleFile(e) {
         return;
     }
     var reader = new FileReader();
+   // reader.readAsText(file, 'ISO-8859-1');
+  //  reader.readAsArrayBuffer(file);
     reader.onload = function(e) {
         var contents = e.target.result;
         sendFile(contents);
         sendLanguage();
-        sendLevel();
         httpGet();
         getBookLang();
     };
-    reader.readAsText(file);
+   // reader.readAsText(file);
+    reader.readAsArrayBuffer(file);
     clearFilePath();
 }
 
@@ -130,7 +115,7 @@ function getBookLang()
     xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
     xmlHttp.send( null );
     var item = document.getElementsByClassName("bookLang")[0];
-    item.innerHTML = "The book is written in " + xmlHttp.responseText;
+    item.innerHTML = "The book " + document.getElementById("file-input").value + " is written in " + xmlHttp.responseText + ". These are the most popular words in this book."
 }
 
 function deleteRows() {

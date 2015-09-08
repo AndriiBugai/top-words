@@ -14,7 +14,7 @@ public abstract class Book {
 
     private String notValidBook = "{ \"error\": \"notValidBook\" }";
     private int numberOfWordsToTranslate = 10;
-    private String input;
+    private byte[] input;
     private String text;
     private ArrayList<String> allWords;
     private ArrayList<Word> popularWords;
@@ -24,9 +24,9 @@ public abstract class Book {
     private String textLanguageName;
 
 
-    public abstract void parse(String input);
+    public abstract void parse(byte[] input);
 
-    public Book(String input, EnglishLexicon lexicon) {
+    public Book(byte[] input, EnglishLexicon lexicon) {
         allWords = new ArrayList<String>();
         popularWords = new ArrayList<Word>();
         this.lexicon = lexicon;
@@ -122,7 +122,7 @@ public abstract class Book {
 
         //Detect returns a Language Enum representing the language code
         try {
-            Language detectedLanguage1 = Detect.execute(allWords.get(1) + " " + allWords.get(2) + allWords.get(3));
+            Language detectedLanguage1 = Detect.execute(allWords.get(1) + " " + allWords.get(2) + " " + allWords.get(3));
             textLanguageName = detectedLanguage1.getName(Language.ENGLISH);
             textLanguage = detectedLanguage1.toString();
 //            System.out.println(textLanguage);
@@ -238,10 +238,10 @@ public abstract class Book {
     public void setPopularWords(ArrayList<Word> popularWords) {
         this.popularWords = popularWords;
     }
-    public String getInput() {
+    public byte[] getInput() {
         return input;
     }
-    public void setInput(String input) {
+    public void setInput(byte[] input) {
         this.input = input;
     }
 }

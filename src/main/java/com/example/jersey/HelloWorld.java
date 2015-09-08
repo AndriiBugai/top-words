@@ -1,10 +1,7 @@
 package com.example.jersey;
 
 import com.sun.org.apache.xpath.internal.SourceTree;
-import parseBook.Book;
-import parseBook.EnglishLexicon;
-import parseBook.FB2Book;
-import parseBook.TXTBook;
+import parseBook.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -17,6 +14,7 @@ import java.util.HashSet;
 public class HelloWorld {
 
     static String text;
+    static byte[] input;
     static String level;
     static String format;
     static String language;
@@ -33,18 +31,33 @@ public class HelloWorld {
         HashSet<String> canonicalEnglish;
         HashMap<String, String> dict;
 
-        EnglishLexicon lexicon = new EnglishLexicon(level);
+        EnglishLexicon lexicon = new EnglishLexicon();
 
         Book book;
+
+//        switch (format) {
+//            case "fb2": book =  new FB2Book(text, lexicon);
+//                        break;
+//            case "pdf": book = new PDFBook(text, lexicon);
+//                        break;
+//            case "txt": book = new TXTBook(text, lexicon);
+//                        break;
+//            default:    book = new TXTBook(text, lexicon);
+//        }
+
+
         if(format.equals("fb2")) {
-            book = new FB2Book(text, lexicon);
+            book = new FB2Book(input, lexicon);
+        } else if(format.equals("pdf"))  {
+            book = new PDFBook(input, lexicon);
         } else {
-            book = new TXTBook(text, lexicon);
+            book = new TXTBook(input, lexicon);
         }
         String json = book.getJsonTranslation(language);
         bookLanguage = book.getTextLanguage();
 
         return json;
+
     }
 
     @GET
@@ -54,15 +67,6 @@ public class HelloWorld {
         return bookLanguage;
     }
 
-    @POST
-    @Path("/level/")
-//    @Consumes(MediaType.APPLICATION_XML)
-    @Consumes(MediaType.TEXT_PLAIN)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response level(String level) {
-        this.level = level;
-        return Response.status(201).entity("hello").build();
-    }
 
     @POST
     @Path("/format/")
@@ -79,8 +83,8 @@ public class HelloWorld {
 //    @Consumes(MediaType.APPLICATION_XML)
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response send(String text) {
-        this.text = text;
+    public Response send(byte[] input) {
+        this.input = input;
         return Response.status(201).entity("hello").build();
     }
 
