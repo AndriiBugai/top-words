@@ -10,7 +10,7 @@ function clearFilePath() {
 function sendFile(contents) {
     var request = new XMLHttpRequest();
 //    request.open('POST', 'http://localhost:8081/rest/send',false);
-	request.open('POST', 'https://enigmatic-shelf-6374.herokuapp.com/rest/send',false);
+	request.open('POST', '/rest/send',false);
     request.send(contents);
 
  //   console.log(request.status);
@@ -33,7 +33,7 @@ function sendLanguage() {
     }
 
     var request = new XMLHttpRequest();
-    request.open('POST', 'https://enigmatic-shelf-6374.herokuapp.com/rest/lang',false);
+    request.open('POST', '/rest/lang',false);
     request.send(lang);
  //   console.log(request.status);
     return request;
@@ -52,7 +52,7 @@ function findFormat(fileName) {
 
 
     var request = new XMLHttpRequest();
-    request.open('POST', 'https://enigmatic-shelf-6374.herokuapp.com/rest/format', false);
+    request.open('POST', '/rest/format', false);
     request.send(format);
 
     return format;
@@ -99,7 +99,7 @@ function getInfo() {
 
 function httpGet()
 {
-    var theUrl = "https://enigmatic-shelf-6374.herokuapp.com/rest/hello";
+    var theUrl = "/rest/hello";
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
     xmlHttp.send( null );
@@ -111,7 +111,7 @@ function httpGet()
 
 function getBookLang()
 {
-    var theUrl = "https://enigmatic-shelf-6374.herokuapp.com/rest/bookLanguage";
+    var theUrl = "/rest/bookLanguage";
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
     xmlHttp.send( null );
