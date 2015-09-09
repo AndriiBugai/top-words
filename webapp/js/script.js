@@ -9,7 +9,8 @@ function clearFilePath() {
 
 function sendFile(contents) {
     var request = new XMLHttpRequest();
-    request.open('POST', 'http://localhost:8081/rest/send',false);
+//    request.open('POST', 'http://localhost:8081/rest/send',false);
+	request.open('POST', '/rest/send',false);
     request.send(contents);
 
  //   console.log(request.status);
@@ -32,7 +33,7 @@ function sendLanguage() {
     }
 
     var request = new XMLHttpRequest();
-    request.open('POST', 'http://localhost:8081/rest/lang',false);
+    request.open('POST', '/rest/lang',false);
     request.send(lang);
  //   console.log(request.status);
     return request;
@@ -51,7 +52,7 @@ function findFormat(fileName) {
 
 
     var request = new XMLHttpRequest();
-    request.open('POST', 'http://localhost:8081/rest/format', false);
+    request.open('POST', '/rest/format', false);
     request.send(format);
 
     return format;
@@ -98,7 +99,7 @@ function getInfo() {
 
 function httpGet()
 {
-    var theUrl = "http://localhost:8081/rest/hello";
+    var theUrl = "/rest/hello";
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
     xmlHttp.send( null );
@@ -110,7 +111,7 @@ function httpGet()
 
 function getBookLang()
 {
-    var theUrl = "http://localhost:8081/rest/bookLanguage";
+    var theUrl = "/rest/bookLanguage";
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
     xmlHttp.send( null );
