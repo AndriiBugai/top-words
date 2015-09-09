@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+
+</head>
+<body>
+
+asdasd
+
+<script>
+   function formatDefinition() {
+        var text = "n. 1 a part of a plant stem from which leaves emerge. B knob on a root or branch. 2 natural swelling. 3 either of two points at which a planet's orbit intersects the plane of the ecliptic or the celestial equator. 4 point of minimum disturbance in a standing wave system. 5 point at which a curve intersects itself. 6 component in a computer network.  nodal adj. [latin nodus knot]";
+        var text2 = "";
+
+        var setOfNumbers = new Set(["1", "2", "3", "4", "5", "6", "7", "8", "9"]);
+
+        for(var i = 0; i < text.length; i++) {
+            var char = text[i];
+            if(setOfNumbers.has(char)) {
+                text2 = text2.concat("<br>");
+            }
+            text2 = text2.concat(char);
+        }
+        document.getElementsByTagName("body")[0].innerHTML = text2;
+       //document.getElementsByTagName("body")[0].innerHTML = "213123";
+    }
+
+
+
+</script>
+
+
+</body>
+</html>
