@@ -8,15 +8,23 @@ function clearFilePath() {
 }
 
 function sendFile(contents) {
+
+
+
     var request = new XMLHttpRequest();
 //    request.open('POST', 'http://localhost:8081/rest/send',false);
-	request.open('POST', '/rest/send',false);
+	request.open('POST', '/rest/send',true);
     request.send(contents);
 
  //   console.log(request.status);
 
     request.onreadystatechange = function() { // (3)
-        if (request.readyState != 4) return;
+        if (request.readyState != 4) {
+            request.onreadystatechange = null;
+            sendLanguage();
+            return
+        }
+
     }
 //    return request;
 
@@ -36,13 +44,17 @@ function sendLanguage() {
     }
 
     var request = new XMLHttpRequest();
-    request.open('POST', '/rest/lang',false);
+    request.open('POST', '/rest/lang',true);
     request.send(lang);
  //   console.log(request.status);
 //    return request;
 
     request.onreadystatechange = function() { // (3)
-        if (request.readyState != 4) return;
+        if (request.readyState != 4) {
+            httpGet();
+            request.onreadystatechange = null;
+            return
+        };
     }
 }
 
@@ -58,12 +70,17 @@ function findFormat(fileName) {
 
 
     var request = new XMLHttpRequest();
-    request.open('POST', '/rest/format', false);
+    request.open('POST', '/rest/format', true);
     request.send(format);
 
   //  return format;
     request.onreadystatechange = function() { // (3)
-        if (request.readyState != 4) return;
+        if (request.readyState != 4) {
+            request.onreadystatechange = null;
+            return;
+        }
+
+
     }
 }
 
@@ -80,7 +97,7 @@ function readSingleFile(e) {
         return;
     }
 
-    changeProgressVisivility();
+    setProgressVisible();
 
 
     var file = e.target.files[0];
@@ -93,11 +110,11 @@ function readSingleFile(e) {
     reader.onload = function(e) {
         var contents = e.target.result;
         sendFile(contents);
-        sendLanguage();
-        httpGet();
+//        sendLanguage();
+//        httpGet();
         hideAbout();
-        getBookLang();
-        changeProgressVisivility();
+//        getBookLang();
+//        changeProgressVisivility();
     };
    // reader.readAsText(file);
     reader.readAsArrayBuffer(file);
@@ -115,30 +132,43 @@ function httpGet()
 {
     var theUrl = "/rest/hello";
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.open( "GET", theUrl, true ); // false for synchronous request
     xmlHttp.send( null );
 
     xmlHttp.onreadystatechange = function() { // (3)
-        if (xmlHttp.readyState != 4) return;
+        if (xmlHttp.readyState != 4 && xmlHttp.responseText != null) {
+//            xmlHttp.onreadystatechange = null;
+            getBookLang();
+
+            var item = document.getElementById("text");
+            //   console.log(xmlHttp.responseText)
+            var arr = JSON.parse(xmlHttp.responseText);
+            tableCreate(arr);
+
+            return
+        };
     }
-    var item = document.getElementById("text");
- //   console.log(xmlHttp.responseText)
-    var arr = JSON.parse(xmlHttp.responseText);
-    tableCreate(arr);
+
 }
 
 function getBookLang()
 {
     var theUrl = "/rest/bookLanguage";
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.open( "GET", theUrl, true ); // false for synchronous request
     xmlHttp.send( null );
 
     xmlHttp.onreadystatechange = function() { // (3)
-        if (xmlHttp.readyState != 4) return;
+        if (xmlHttp.readyState != 4) {
+            xmlHttp.onreadystatechange = null;
+            setProgressHidden();
+            var item = document.getElementsByClassName("bookLang")[0];
+            item.innerHTML = "The book " + document.getElementById("file-input").value + " is written in " + xmlHttp.responseText + ". These are the most popular words in this book."
+
+            return
+        };
     }
-    var item = document.getElementsByClassName("bookLang")[0];
-    item.innerHTML = "The book " + document.getElementById("file-input").value + " is written in " + xmlHttp.responseText + ". These are the most popular words in this book."
+
 }
 
 function deleteRows() {
@@ -148,8 +178,11 @@ function deleteRows() {
     }
 }
 
+
+
 function tableCreate(array) {
     deleteRows();
+
     var tbl = document.getElementById('word_table');
     var tbody = tbl.getElementsByTagName("tbody")[0];
     var thead = tbl.getElementsByTagName("thead")[0];
@@ -237,15 +270,18 @@ function hideAbout() {
     aboutDiv.style.display = 'none';
 }
 
-function changeProgressVisivility() {
+function setProgressVisible() {
     var progressDiv = document.getElementsByClassName("progressBar")[0];
     var visibility = progressDiv.style.visibility;
+    progressDiv.style.visibility = "visible";
 
-    if(visibility == "visible") {
-        progressDiv.style.visibility = "hidden";
-    } else {
-        progressDiv.style.visibility = "visible";
-    }
+}
+
+function setProgressHidden() {
+    var progressDiv = document.getElementsByClassName("progressBar")[0];
+    var visibility = progressDiv.style.visibility;
+    progressDiv.style.visibility = "hidden";
+
 }
 
 

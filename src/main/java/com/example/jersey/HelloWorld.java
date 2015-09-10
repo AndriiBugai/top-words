@@ -26,6 +26,7 @@ public class HelloWorld {
     @Path("/hello")
     @Produces("text/html")
     public String getMessage() {
+        System.out.println("main - hello");
 
         HashSet<String> easyWords;
         HashSet<String> canonicalEnglish;
@@ -64,7 +65,9 @@ public class HelloWorld {
     @Path("/bookLanguage")
     @Produces("text/html")
     public String getLanguage() {
+        System.out.println("getLanguage");
         return bookLanguage;
+
     }
 
 
@@ -75,6 +78,7 @@ public class HelloWorld {
     @Produces(MediaType.TEXT_PLAIN)
     public Response format(String format) {
         this.format = format;
+        System.out.println("format");
         return Response.status(201).entity("hello").build();
     }
 
@@ -85,6 +89,7 @@ public class HelloWorld {
     @Produces(MediaType.TEXT_PLAIN)
     public Response send(byte[] input) {
         this.input = input;
+        System.out.println("send - input text");
         return Response.status(201).entity("hello").build();
     }
 
@@ -97,6 +102,7 @@ public class HelloWorld {
     public Response language(String text) {
     //    System.out.println(text);
         language = text;
+        System.out.println("set language");
         return Response.status(201).entity("hello").build();
     }
 
