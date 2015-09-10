@@ -9,7 +9,7 @@
 }
 
 table {
-    width: 40% !important;
+    width: 70% !important;
     margin: auto;
 }
 
@@ -84,4 +84,27 @@ span {
     margin: 0 auto;
     text-align: center;
 }
+
+.center {
+    width: 70% !important;
+    margin: auto;
+    color: #5cb85c;
+    font-size: 18px;
+    font-family: serif;
+    padding-bottom: 6px;
+    padding-top: 6px;
+}
+
+.progressBar {
+    visibility: hidden;
+    text-align: center;
+    margin: 0 auto;
+    width: 220px;
+    height: 200px;
+    background-color: white;
+    font-size: 16px;
+}
+
+
+
 

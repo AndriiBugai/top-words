@@ -85,3 +85,27 @@ span {
     text-align: center;
 }
 
+.center {
+    width: 70% !important;
+    margin: auto;
+    color: #004600;
+    font-size: 18px;
+    font-family: serif;
+    text-align: center;
+    padding-bottom: 6px;
+    padding-top: 6px;
+}
+
+.progressBar {
+    visibility: hidden;
+    text-align: center;
+    margin: 0 auto;
+    width: 220px;
+    height: 200px;
+    background-color: white;
+    font-size: 16px;
+}
+
+
+
+

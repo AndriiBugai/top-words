@@ -18,10 +18,13 @@ public class EnglishLexicon {
     private HashSet<String> englishLexicon;
     private HashMap<String, String> definitions;
 
-    final String fileForBeginner = "https://enigmatic-shelf-6374.herokuapp.com/top_100_popular_words.txt";
-    final String fileForIntermediate = "https://enigmatic-shelf-6374.herokuapp.com/top_1000_popular_words.txt";
-    final String fileOfEnglishLexicon = "https://enigmatic-shelf-6374.herokuapp.com/Canonical_English_lexicon.txt";
-    final String fileOfDict = "https://enigmatic-shelf-6374.herokuapp.com/dictionary.txt";
+    final String hostName = "https://enigmatic-shelf-6374.herokuapp.com/";
+    final String hostName2 = "http://localhost:8081/";
+
+    final String fileForBeginner = hostName + "top_100_popular_words.txt";
+    final String fileForIntermediate = hostName + "top_1000_popular_words.txt";
+    final String fileOfEnglishLexicon = hostName + "Canonical_English_lexicon.txt";
+    final String fileOfDict = hostName + "dictionary.txt";
 
 
     public EnglishLexicon() {
@@ -33,6 +36,12 @@ public class EnglishLexicon {
 
     public String getDefinition(String word) {
         String def = definitions.get(word);
+
+        if(def == null && word.substring(word.length() - 3, word.length()).equals("ies")) {
+            String newWord = word.substring(0, word.length() - 3) + "y";
+            def = "#" + newWord + "# " + definitions.get(newWord);
+        }
+
         if(def == null && word.charAt(word.length() - 1) == 's') {
             String newWord = word.substring(0, word.length() - 1);
             def = "#" + newWord + "# " + definitions.get(newWord);
