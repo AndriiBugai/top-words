@@ -18,10 +18,10 @@ public class EnglishLexicon {
     private HashSet<String> englishLexicon;
     private HashMap<String, String> definitions;
 
-    final String fileForBeginner = "http://localhost:8081/top_100_popular_words.txt";
-    final String fileForIntermediate = "http://localhost:8081/top_1000_popular_words.txt";
-    final String fileOfEnglishLexicon = "http://localhost:8081/Canonical_English_lexicon.txt";
-    final String fileOfDict = "http://localhost:8081/dictionary.txt";
+    final String fileForBeginner = "https://enigmatic-shelf-6374.herokuapp.com/top_100_popular_words.txt";
+    final String fileForIntermediate = "https://enigmatic-shelf-6374.herokuapp.com/top_1000_popular_words.txt";
+    final String fileOfEnglishLexicon = "https://enigmatic-shelf-6374.herokuapp.com/Canonical_English_lexicon.txt";
+    final String fileOfDict = "https://enigmatic-shelf-6374.herokuapp.com/dictionary.txt";
 
 
     public EnglishLexicon() {
