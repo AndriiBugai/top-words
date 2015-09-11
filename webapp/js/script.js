@@ -84,11 +84,13 @@ function readSingleFile(e) {
         return;
     }
     var reader = new FileReader();
+
     reader.onload = function(e) {
         var contents = e.target.result;
         sendFile(contents);
         hideAbout();
     };
+   // reader.readAsText(file);
     reader.readAsArrayBuffer(file);
     clearFilePath();
 }
@@ -107,8 +109,9 @@ function httpGet()
     xmlHttp.open( "GET", theUrl, true ); // false for synchronous request
     xmlHttp.send( null );
 
-    xmlHttp.onreadystatechange = function() {
+    xmlHttp.onreadystatechange = function() { // (3)
         if (xmlHttp.readyState != 4 && xmlHttp.responseText != null) {
+
             getBookLang();
 
             var item = document.getElementById("text");
@@ -131,7 +134,7 @@ function getBookLang()
 
     xmlHttp.onreadystatechange = function() { // (3)
         if (xmlHttp.readyState != 4) {
-            xmlHttp.onreadystatechange = null;
+          //  xmlHttp.onreadystatechange = null;
             setProgressHidden();
             var item = document.getElementsByClassName("bookLang")[0];
             item.innerHTML = "The book " + document.getElementById("file-input").value + " is written in " + xmlHttp.responseText + ". These are the most popular words in this book."
@@ -223,15 +226,11 @@ function formatDefinition(text) {
         }
     }
 
-   // if(text2.indexOf("|") > -1) {
+
         var begin = text2.indexOf("#", 0);
         var end = text2.indexOf("#", begin + 1);
 
         text2 = text2.substring(0,begin) + "<span>" + text2.substring(begin + 1,end) + "</span>" +text2.substring(end + 1,text2.length) ;
-  //      console.log("add span" + begin + " " + end)
-  //  }
-
-   // console.log(text2);
 
     return text2;
 }
@@ -245,14 +244,12 @@ function setProgressVisible() {
     var progressDiv = document.getElementsByClassName("progressBar")[0];
     var visibility = progressDiv.style.visibility;
     progressDiv.style.visibility = "visible";
-
 }
 
 function setProgressHidden() {
     var progressDiv = document.getElementsByClassName("progressBar")[0];
     var visibility = progressDiv.style.visibility;
     progressDiv.style.visibility = "hidden";
-
 }
 
 
