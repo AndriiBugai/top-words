@@ -3,20 +3,12 @@
  */
 function clearFilePath() {
     document.getElementById("file-input").value = "";
- //   console.log("Changed path to " +  document.getElementById("file-input").value);
-
 }
 
 function sendFile(contents) {
-
-
-
     var request = new XMLHttpRequest();
-//    request.open('POST', 'http://localhost:8081/rest/send',false);
 	request.open('POST', '/rest/send',true);
     request.send(contents);
-
- //   console.log(request.status);
 
     request.onreadystatechange = function() { // (3)
         if (request.readyState != 4) {
@@ -24,10 +16,7 @@ function sendFile(contents) {
             sendLanguage();
             return
         }
-
     }
-//    return request;
-
 }
 
 
@@ -46,8 +35,6 @@ function sendLanguage() {
     var request = new XMLHttpRequest();
     request.open('POST', '/rest/lang',true);
     request.send(lang);
- //   console.log(request.status);
-//    return request;
 
     request.onreadystatechange = function() { // (3)
         if (request.readyState != 4) {
@@ -62,36 +49,28 @@ function findFormat(fileName) {
     var length = fileName.length;
     var format = fileName.substring(length-3, length);
 
-//    console.log( "Format " + format);
-
     if(format != "fb2" && format != "txt" && format != "pdf") {
         return "formatError";
     }
-
 
     var request = new XMLHttpRequest();
     request.open('POST', '/rest/format', true);
     request.send(format);
 
-  //  return format;
     request.onreadystatechange = function() { // (3)
         if (request.readyState != 4) {
             request.onreadystatechange = null;
             return;
         }
-
-
     }
 }
 
 function readSingleFile(e) {
- //   console.log("path " + document.getElementById("file-input").value);
     if(document.getElementById("file-input").value == "") {
         return;
     }
 
     var format = findFormat(document.getElementById("file-input").value);
- //   console.log(format);
     if(format == "formatError") {
         alert("File format error \n50 words works with .fb2 and .txt ebooks");
         return;
@@ -105,16 +84,11 @@ function readSingleFile(e) {
         return;
     }
     var reader = new FileReader();
-   // reader.readAsText(file, 'ISO-8859-1');
-  //  reader.readAsArrayBuffer(file);
+
     reader.onload = function(e) {
         var contents = e.target.result;
         sendFile(contents);
-//        sendLanguage();
-//        httpGet();
         hideAbout();
-//        getBookLang();
-//        changeProgressVisivility();
     };
    // reader.readAsText(file);
     reader.readAsArrayBuffer(file);
@@ -137,7 +111,7 @@ function httpGet()
 
     xmlHttp.onreadystatechange = function() { // (3)
         if (xmlHttp.readyState != 4 && xmlHttp.responseText != null) {
-//            xmlHttp.onreadystatechange = null;
+
             getBookLang();
 
             var item = document.getElementById("text");
@@ -160,10 +134,10 @@ function getBookLang()
 
     xmlHttp.onreadystatechange = function() { // (3)
         if (xmlHttp.readyState != 4) {
-            xmlHttp.onreadystatechange = null;
+          //  xmlHttp.onreadystatechange = null;
             setProgressHidden();
             var item = document.getElementsByClassName("bookLang")[0];
-            item.innerHTML = "The book " + document.getElementById("file-input").value + " is written in " + xmlHttp.responseText + ". These are the most popular words in this book."
+            item.innerHTML = "The book " + document.getElementById("file-input").value + " is written in " + xmlHttp.responseText + ". These are the most popular words in this book:"
 
             return
         };
@@ -252,15 +226,11 @@ function formatDefinition(text) {
         }
     }
 
-   // if(text2.indexOf("|") > -1) {
+
         var begin = text2.indexOf("#", 0);
         var end = text2.indexOf("#", begin + 1);
 
         text2 = text2.substring(0,begin) + "<span>" + text2.substring(begin + 1,end) + "</span>" +text2.substring(end + 1,text2.length) ;
-  //      console.log("add span" + begin + " " + end)
-  //  }
-
-   // console.log(text2);
 
     return text2;
 }
@@ -274,14 +244,12 @@ function setProgressVisible() {
     var progressDiv = document.getElementsByClassName("progressBar")[0];
     var visibility = progressDiv.style.visibility;
     progressDiv.style.visibility = "visible";
-
 }
 
 function setProgressHidden() {
     var progressDiv = document.getElementsByClassName("progressBar")[0];
     var visibility = progressDiv.style.visibility;
     progressDiv.style.visibility = "hidden";
-
 }
 
 

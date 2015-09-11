@@ -88,11 +88,12 @@ span {
 .center {
     width: 70% !important;
     margin: auto;
-    color: #5cb85c;
+    color: #004600;
     font-size: 18px;
-    font-family: serif;
-    padding-bottom: 6px;
-    padding-top: 6px;
+    text-align: center;
+    font-weight: bold;
+    padding-bottom: 20px;
+    padding-top: 20px;
 }
 
 .progressBar {

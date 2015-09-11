@@ -13,7 +13,7 @@ import java.util.*;
 public abstract class Book {
 
     private String notValidBook = "{ \"error\": \"notValidBook\" }";
-    private int numberOfWordsToTranslate = 10;
+    private int numberOfWordsToTranslate = 25;
     private byte[] input;
     private String text;
     private ArrayList<String> allWords;

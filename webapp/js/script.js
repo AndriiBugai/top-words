@@ -137,7 +137,7 @@ function getBookLang()
           //  xmlHttp.onreadystatechange = null;
             setProgressHidden();
             var item = document.getElementsByClassName("bookLang")[0];
-            item.innerHTML = "The book " + document.getElementById("file-input").value + " is written in " + xmlHttp.responseText + ". These are the most popular words in this book."
+            item.innerHTML = "The book " + document.getElementById("file-input").value + " is written in " + xmlHttp.responseText + ". These are the most popular words in this book:"
 
             return
         };
