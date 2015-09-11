@@ -18,7 +18,7 @@ public class EnglishLexicon {
     private HashSet<String> englishLexicon;
     private HashMap<String, String> definitions;
 
-    final String hostName = "https://enigmatic-shelf-6374.herokuapp.com/";
+    final String hostName = "https://top-words.herokuapp.com/";
     final String hostName2 = "http://localhost:8081/";
 
     final String fileForBeginner = hostName + "top_100_popular_words.txt";

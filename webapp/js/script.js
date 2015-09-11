@@ -3,20 +3,12 @@
  */
 function clearFilePath() {
     document.getElementById("file-input").value = "";
- //   console.log("Changed path to " +  document.getElementById("file-input").value);
-
 }
 
 function sendFile(contents) {
-
-
-
     var request = new XMLHttpRequest();
-//    request.open('POST', 'http://localhost:8081/rest/send',false);
 	request.open('POST', '/rest/send',true);
     request.send(contents);
-
- //   console.log(request.status);
 
     request.onreadystatechange = function() { // (3)
         if (request.readyState != 4) {
@@ -24,10 +16,7 @@ function sendFile(contents) {
             sendLanguage();
             return
         }
-
     }
-//    return request;
-
 }
 
 
@@ -46,8 +35,6 @@ function sendLanguage() {
     var request = new XMLHttpRequest();
     request.open('POST', '/rest/lang',true);
     request.send(lang);
- //   console.log(request.status);
-//    return request;
 
     request.onreadystatechange = function() { // (3)
         if (request.readyState != 4) {
@@ -62,36 +49,28 @@ function findFormat(fileName) {
     var length = fileName.length;
     var format = fileName.substring(length-3, length);
 
-//    console.log( "Format " + format);
-
     if(format != "fb2" && format != "txt" && format != "pdf") {
         return "formatError";
     }
-
 
     var request = new XMLHttpRequest();
     request.open('POST', '/rest/format', true);
     request.send(format);
 
-  //  return format;
     request.onreadystatechange = function() { // (3)
         if (request.readyState != 4) {
             request.onreadystatechange = null;
             return;
         }
-
-
     }
 }
 
 function readSingleFile(e) {
- //   console.log("path " + document.getElementById("file-input").value);
     if(document.getElementById("file-input").value == "") {
         return;
     }
 
     var format = findFormat(document.getElementById("file-input").value);
- //   console.log(format);
     if(format == "formatError") {
         alert("File format error \n50 words works with .fb2 and .txt ebooks");
         return;
@@ -105,18 +84,11 @@ function readSingleFile(e) {
         return;
     }
     var reader = new FileReader();
-   // reader.readAsText(file, 'ISO-8859-1');
-  //  reader.readAsArrayBuffer(file);
     reader.onload = function(e) {
         var contents = e.target.result;
         sendFile(contents);
-//        sendLanguage();
-//        httpGet();
         hideAbout();
-//        getBookLang();
-//        changeProgressVisivility();
     };
-   // reader.readAsText(file);
     reader.readAsArrayBuffer(file);
     clearFilePath();
 }
@@ -135,9 +107,8 @@ function httpGet()
     xmlHttp.open( "GET", theUrl, true ); // false for synchronous request
     xmlHttp.send( null );
 
-    xmlHttp.onreadystatechange = function() { // (3)
+    xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState != 4 && xmlHttp.responseText != null) {
-//            xmlHttp.onreadystatechange = null;
             getBookLang();
 
             var item = document.getElementById("text");
