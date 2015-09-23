@@ -10,12 +10,12 @@ import java.util.HashSet;
  */
 public class TXTBook extends Book {
 
-    public TXTBook(byte[] input, EnglishLexicon lexicon) {
+    public TXTBook(byte[]  input, EnglishLexicon lexicon) {
         super(input, lexicon);
     }
 
     @Override
-    public void parse(byte[] input) {
+    public void parse(byte[]  input) {
         String text = "";
 
         try {

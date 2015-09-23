@@ -17,18 +17,19 @@ import java.util.ArrayList;
  */
 public class FB2Book extends Book {
 
-    public FB2Book(byte[] input, EnglishLexicon lexicon) {
+    public FB2Book(byte[]  input, EnglishLexicon lexicon) {
         super(input, lexicon);
     }
 
     @Override
-    public void parse(byte[] xmlString) {
+    public void parse(byte[]  xmlString) {
         {
             ArrayList<String> list = new ArrayList<String>();
             String text= "";
             try {
 //            File fXmlFile = new File(bookTitle);
                 ByteArrayInputStream byteStream = new ByteArrayInputStream(xmlString);
+              //  ByteArrayInputStream byteStream = new ByteArrayInputStream( xmlString.getBytes() );
                 InputSource is = new InputSource(byteStream);
                 DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();

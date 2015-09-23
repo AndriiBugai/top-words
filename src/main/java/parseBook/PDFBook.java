@@ -17,12 +17,12 @@ import java.nio.charset.StandardCharsets;
  */
 public class PDFBook extends Book  {
 
-    public PDFBook(byte[] input, EnglishLexicon lexicon) {
+    public PDFBook(byte[]  input, EnglishLexicon lexicon) {
         super(input, lexicon);
     }
 
     @Override
-    public void parse(byte[] input) {
+    public void parse(byte[]  input) {
         String text = "";
         try {
 
@@ -30,6 +30,7 @@ public class PDFBook extends Book  {
 
 //            InputStream is = new ByteArrayInputStream(Charset.forName("UTF-8").encode(input).array());
             ByteArrayInputStream is = new ByteArrayInputStream(input);
+         //   ByteArrayInputStream is = new ByteArrayInputStream( input.getBytes() );
 
 
             //     PdfReader reader = new PdfReader("/home/strapper/Desktop/mvnref-pdf.pdf");

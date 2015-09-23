@@ -24,9 +24,9 @@ public abstract class Book {
     private String textLanguageName;
 
 
-    public abstract void parse(byte[] input);
+    public abstract void parse(byte[]  input);
 
-    public Book(byte[] input, EnglishLexicon lexicon) {
+    public Book(byte[]  input, EnglishLexicon lexicon) {
         allWords = new ArrayList<String>();
         popularWords = new ArrayList<Word>();
         this.lexicon = lexicon;
@@ -151,7 +151,7 @@ public abstract class Book {
         }
 
         for(int i = 0; i < array.length; i++) {
- //           popularWords.get(i).setTranslation("translation");
+//            popularWords.get(i).setTranslation("translation");
             popularWords.get(i).setTranslation(translatedText[i]);
         }
     }
@@ -173,6 +173,20 @@ public abstract class Book {
             array[i] = popularWords.get(i).getText();
         }
         return array;
+    }
+
+    public void deleteRepeatedWords() {
+        Iterator<Word> iter = popularWords.iterator();
+        while (iter.hasNext()){
+            Word item = iter.next();
+            String cand1 = item.getText().toLowerCase();
+            String word =  item.getText();
+            String cand2 = word.substring(0, 1).toUpperCase() + word.substring(1,word.length());
+            String cand3 = lexicon.generateCandiadete(word);
+            if(popularWords.contains(cand1) || popularWords.contains(cand2) || popularWords.contains(cand3)) {
+                iter.remove();
+            }
+        }
     }
 
     public String toJSON() {
@@ -210,6 +224,7 @@ public abstract class Book {
         }
 
         findPopularWords();
+        deleteRepeatedWords();
         translate(lang);
 
         if(textLanguage.equals("en")) {
@@ -238,10 +253,10 @@ public abstract class Book {
     public void setPopularWords(ArrayList<Word> popularWords) {
         this.popularWords = popularWords;
     }
-    public byte[] getInput() {
+    public byte[]  getInput() {
         return input;
     }
-    public void setInput(byte[] input) {
+    public void setInput(byte[]  input) {
         this.input = input;
     }
 }

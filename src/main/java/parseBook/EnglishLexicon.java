@@ -21,9 +21,9 @@ public class EnglishLexicon {
     final String hostName = "https://top-words.herokuapp.com/";
     final String hostName2 = "http://localhost:8081/";
 
-    final String fileForBeginner = hostName + "top_100_popular_words.txt";
-    final String fileForIntermediate = hostName + "top_1000_popular_words.txt";
-    final String fileOfEnglishLexicon = hostName + "Canonical_English_lexicon.txt";
+    final String fileForBeginner = hostName2 + "top_100_popular_words.txt";
+    final String fileForIntermediate = hostName2 + "top_1000_popular_words.txt";
+    final String fileOfEnglishLexicon = hostName2 + "Canonical_English_lexicon.txt";
     final String fileOfDict = hostName + "dictionary.txt";
 
 
@@ -37,26 +37,8 @@ public class EnglishLexicon {
     public String getDefinition(String word) {
         String def = definitions.get(word);
 
-        if(def == null && word.substring(word.length() - 3, word.length()).equals("ies")) {
-            String newWord = word.substring(0, word.length() - 3) + "y";
-            def = "#" + newWord + "# " + definitions.get(newWord);
-        }
-
-        if(def == null && word.charAt(word.length() - 1) == 's') {
-            String newWord = word.substring(0, word.length() - 1);
-            def = "#" + newWord + "# " + definitions.get(newWord);
-        }
-
-        if(def == null && word.substring(word.length() - 1, word.length()).equals("d")) {
-            String newWord = word.substring(0, word.length() - 1);
-            if(definitions.containsKey(newWord)) {
-                def = "#" + newWord + "#  " + definitions.get(newWord);
-            }
-
-        }
-
-        if(def == null && word.substring(word.length() - 2, word.length()).equals("ed")) {
-            String newWord = word.substring(0, word.length() - 2);
+        if(def == null) {
+            String newWord = getAlternative(word);
             def = "#" + newWord + "#  " + definitions.get(newWord);
         }
 
@@ -76,6 +58,121 @@ public class EnglishLexicon {
 
         if(def == null) {
             def = "No definition found for this word";
+        }
+
+        return def;
+    }
+
+    public String getAlternative(String word) {
+        String def = definitions.get(word);
+
+        try {
+            if (def == null && word.substring(word.length() - 3, word.length()).equals("ies")) {
+                String newWord = word.substring(0, word.length() - 3) + "y";
+                return newWord;
+            }
+
+            if (def == null && word.substring(word.length() - 3, word.length()).equals("ing")) {
+                String newWord = word.substring(0, word.length() - 3);
+                if (definitions.get(newWord) != null) {
+                    return def;
+                }
+                newWord = word.substring(0, word.length() - 4);
+                if (definitions.get(newWord) != null) {
+                    def = "#" + newWord + "# " + definitions.get(newWord);
+                    return newWord;
+                }
+
+                newWord = word.substring(0, word.length() - 3) + "e";
+                if (definitions.get(newWord) != null) {
+                    return newWord;
+                }
+            }
+
+            if (def == null && word.charAt(word.length() - 1) == 's') {
+                String newWord = word.substring(0, word.length() - 1);
+                if (definitions.get(newWord) != null) {
+                    return newWord;
+                }
+                newWord = word.substring(0, word.length() - 2);
+                if (definitions.get(newWord) != null) {
+                    return newWord;
+                }
+            }
+
+            if (def == null && word.substring(word.length() - 1, word.length()).equals("d")) {
+                String newWord = word.substring(0, word.length() - 1);
+                if (definitions.containsKey(newWord)) {
+                    return newWord;
+                }
+
+            }
+
+            if (def == null && word.substring(word.length() - 2, word.length()).equals("ed")) {
+                String newWord = word.substring(0, word.length() - 2);
+                return newWord;
+            }
+        } catch (Exception e) {
+
+        }
+        return word;
+    }
+
+    public String generateCandiadete(String word) {
+        String def = definitions.get(word);
+
+        try {
+            if(def == null && word.substring(word.length() - 3, word.length()).equals("ies")) {
+                String newWord = word.substring(0, word.length() - 3) + "y";
+                def = "#" + newWord + "# " + definitions.get(newWord);
+            }
+
+            if(def == null && word.substring(word.length() - 3, word.length()).equals("ing")) {
+                String newWord = word.substring(0, word.length() - 3);
+                if(definitions.get(newWord) != null) {
+                    def = "#" + newWord + "# " + definitions.get(newWord);
+                    return def;
+                }
+                newWord = word.substring(0, word.length() - 4);
+                if(definitions.get(newWord) != null) {
+                    def = "#" + newWord + "# " + definitions.get(newWord);
+                    return def;
+                }
+
+                newWord = word.substring(0, word.length() - 3) + "e";
+                if(definitions.get(newWord) != null) {
+                    def = "#" + newWord + "# " + definitions.get(newWord);
+                    return def;
+                }
+            }
+
+            if(def == null && word.charAt(word.length() - 1) == 's') {
+                String newWord = word.substring(0, word.length() - 1);
+                if(definitions.get(newWord) != null) {
+                    def = "#" + newWord + "# " + definitions.get(newWord);
+                    return def;
+                }
+                newWord = word.substring(0, word.length() - 2);
+                if(definitions.get(newWord) != null) {
+                    def = "#" + newWord + "# " + definitions.get(newWord);
+                    return def;
+                }
+            }
+
+            if(def == null && word.substring(word.length() - 1, word.length()).equals("d")) {
+                String newWord = word.substring(0, word.length() - 1);
+                if(definitions.containsKey(newWord)) {
+                    def = "#" + newWord + "#  " + definitions.get(newWord);
+                }
+
+            }
+
+            if(def == null && word.substring(word.length() - 2, word.length()).equals("ed")) {
+                String newWord = word.substring(0, word.length() - 2);
+                def = "#" + newWord + "#  " + definitions.get(newWord);
+            }
+        } catch (Exception e) {
+            def = null;
         }
 
         return def;
