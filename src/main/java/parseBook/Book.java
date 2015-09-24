@@ -4,6 +4,9 @@ import com.memetix.mst.detect.Detect;
 import com.memetix.mst.language.Language;
 import com.memetix.mst.translate.Translate;
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.*;
 
@@ -12,18 +15,22 @@ import java.util.*;
  */
 public abstract class Book {
 
-    private String notValidBook = "{ \"error\": \"notValidBook\" }";
+    private String NOT_VALID_BOOK = "{ \"error\": \"NOT_VALID_BOOK\" }";    // error message for the case when the input file is too short
     private int numberOfWordsToTranslate = 25;
-    private byte[] input;
-    private String text;
-    private ArrayList<String> allWords;
-    private ArrayList<Word> popularWords;
+    private byte[] input;   // book in the binary format
+    private String text;    // raw text from the book
+    private ArrayList<String> allWords;     // list of all words of the book
+    private ArrayList<Word> popularWords;   // list of all top most frequent words of the book; size= numberOfWordsToTranslate
     private EnglishLexicon lexicon;
 
-    private String textLanguage;
-    private String textLanguageName;
+    private String textLanguage;        // abbreviation         e.g. en
+    private String textLanguageName;    // name of the Language e.g. English
 
 
+    /**
+     * Gets raw text form the book
+     * @param input - book in the binary format
+     */
     public abstract void parse(byte[]  input);
 
     public Book(byte[]  input, EnglishLexicon lexicon) {
@@ -31,16 +38,19 @@ public abstract class Book {
         popularWords = new ArrayList<Word>();
         this.lexicon = lexicon;
         this.input = input;
-
     }
 
+    /**
+     * Returns Language, which book is written in
+     */
     public String getTextLanguage() {
         return textLanguageName;
     }
 
+    /**
+     * Finds all words from the raw text of a book and puts them to allWords-ArrayList<String>
+     */
     public void findWords() throws Exception {
-    //    System.out.println(text);
-        ArrayList<String> words = new ArrayList<String>();
         String[] array = text.split(" ");
             for(String element: array) {
                 String word = element.trim();
@@ -48,16 +58,18 @@ public abstract class Book {
                 word = StringUtils.strip(word, ".");
                 word = StringUtils.strip(word, "\"");
                 if(!word.equals("")) {
-                    words.add(word);
+                    allWords.add(word);
                 }
             }
-        if(words.size() < 80) {
+        if(allWords.size() < numberOfWordsToTranslate) {
             throw new Exception();
         }
-
-        allWords = words;
     }
 
+    /**
+     * Deletes those words from allWords-ArrayList<String> that are in lexicon
+     *  @param  lexicon  - set of easy words
+     */
     public void deleteEasyWords(HashSet<String> lexicon) {
         Iterator<String> iterator = allWords.iterator();
         while(iterator.hasNext()) {
@@ -69,6 +81,10 @@ public abstract class Book {
         System.out.println("after deletion remain : " + allWords.size());
     }
 
+    /**
+     * Deletes all the words that are beyond lexicon
+     * @param  lexicon  - set of all valid English words
+     */
     public void deleteUncoventionalWords(HashSet<String> lexicon) {
         Iterator<String> iterator = allWords.iterator();
         while(iterator.hasNext()) {
@@ -82,6 +98,9 @@ public abstract class Book {
 
 
 
+    /**
+     * Selects top - numberOfWordsToTranslate words from allWords list and puts them into popularWords list
+     */
     public void findPopularWords() {
 
         TreeMap<String, Integer> wordsFrequency = new TreeMap<String, Integer>();  // key:words; value:times the word comes across in the book
@@ -111,33 +130,36 @@ public abstract class Book {
                 popularWords.add(listOfWords.get(i));
             }
         } catch (Exception e) {
-//            System.out.println( "Size " + popularWords.size() );
+
         }
 
     }
 
+    /**
+     * Finds the language of a book and puts into textLanguageName
+     */
     public void findBookLanguage() {
         Detect.setClientId("69063100words");
         Detect.setClientSecret("x8LVUEDcJINuNaOdY7w4uVtd1/FzK2S599HgL1ZD99s=");
-
-        //Detect returns a Language Enum representing the language code
         try {
             Language detectedLanguage1 = Detect.execute(allWords.get(1) + " " + allWords.get(2) + " " + allWords.get(3));
             textLanguageName = detectedLanguage1.getName(Language.ENGLISH);
             textLanguage = detectedLanguage1.toString();
-//            System.out.println(textLanguage);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+
+    /**
+     * Translates each word from list of popularWords into outputLanguage
+     * @param outputLanguage - language to translate the book to
+     */
     public void translate(String outputLanguage)  {
         String[] array = getArrayOfWords();
         String[] translatedText = new String[1];
-            Translate.setClientId("69063100words");
-            Translate.setClientSecret("x8LVUEDcJINuNaOdY7w4uVtd1/FzK2S599HgL1ZD99s=");
-
-//        Language lang = Language.UKRAINIAN;
+        Translate.setClientId("69063100words");
+        Translate.setClientSecret("x8LVUEDcJINuNaOdY7w4uVtd1/FzK2S599HgL1ZD99s=");
 
         Language langInput = Language.fromString(textLanguage);
         Language langOutput = Language.fromString(outputLanguage);
@@ -151,11 +173,15 @@ public abstract class Book {
         }
 
         for(int i = 0; i < array.length; i++) {
-//            popularWords.get(i).setTranslation("translation");
             popularWords.get(i).setTranslation(translatedText[i]);
         }
     }
 
+
+    /**
+     * Finds definitions for each word of the list of popularWords
+     * @param dictionary - dictionary of definitions (key - english word, value - definition of the key)
+     */
     public void findDefinitions(HashMap<String, String> dictionary)  {
         for(Word item: popularWords) {
             String word = item.getText();
@@ -164,8 +190,10 @@ public abstract class Book {
         }
     }
 
-
-
+    /**
+     * Turns the list of popularWords into array
+     * @return array of popularWords
+     */
     public String[] getArrayOfWords() {
         int size = popularWords.size();
         String[] array = new String[size];
@@ -189,32 +217,53 @@ public abstract class Book {
         }
     }
 
-    public String toJSON() {
+    /**
+     * Creates json which contains:
+     *          1. the textLanguageName ( language the book is written in )
+     *          2. array of the most popular words with translation,defintion and word frequency
+     * @return json
+     */
+    public String toJSON()  {
+        try{
+            JSONArray array = new JSONArray();
+            for(Word item: popularWords) {
+                String key = item.getText();
+                String value = item.getTranslation();
+                int frequency = item.getFrequency();
+                String definition = item.getDefinition();
 
-        // generating Json
-        String string = "[";
+                JSONObject obj = new JSONObject();
+                obj.put("key", key);
+                obj.put("value", value);
+                obj.put("frequency", frequency);
+                if(definition == null) {
+                    obj.put("definition", "null");
+                } else {
+                    obj.put("definition", definition);
+                }
+                array.put(obj);
+            }
 
-        for(Word item: popularWords) {
-            String key = item.getText();
-            String value = item.getTranslation();
-            int frequency = item.getFrequency();
-            String definition = item.getDefinition();
-
-            string += " {\"key\":\"" + key + "\",\"value\":\"" + value + "\",\"frequency\":\"" +frequency+"\" , \"definition\" : \"" + definition + "\"},";
-
+            JSONObject object = new JSONObject();
+            object.put("language", this.getTextLanguage());
+            object.put("contents", array);
+            return object.toString();
+        } catch (JSONException jsonE) {
+            return null;
         }
-        string = string.substring(0, string.length() - 1);
-        string += "]";
-
-        return string;
     }
 
+    /**
+     * Searches for most popular words in the book, translates them and creates json as result
+     * @param lang - language the book should be translated to
+     * @return json
+     */
     public String getJsonTranslation(String lang) {
         parse(input);
         try{
             findWords();
         } catch (Exception e) {
-            return notValidBook;
+            return NOT_VALID_BOOK;
         }
         findBookLanguage();
 
@@ -224,7 +273,6 @@ public abstract class Book {
         }
 
         findPopularWords();
-        deleteRepeatedWords();
         translate(lang);
 
         if(textLanguage.equals("en")) {
@@ -233,7 +281,6 @@ public abstract class Book {
         String json = toJSON();
         return json;
     }
-
 
     public String getText() {
         return text;

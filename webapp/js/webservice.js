@@ -60,6 +60,7 @@ function readSingleFile(e) {
         Book.language = lang;
         Book.contents = btoa(contents);
 
+        setProgressVisible();
 
         var request = new XMLHttpRequest();
         request.open('POST', '/rest/test',true);
@@ -67,19 +68,17 @@ function readSingleFile(e) {
 
         request.onreadystatechange = function() { // (3)
             if (request.readyState != 4) {
-                var arr = JSON.parse(request.responseText);
-                tableCreate(arr);
-                
+                var input = JSON.parse(request.responseText);
+                var array = input.contents;
+                var lang = input.language;
+                tableCreate(array);
+                setBookLang(lang);
+                setProgressHidden();
                 return;
             }
         }
-
-        //sendFile(contents);
-        //hideAbout();
     };
-    // reader.readAsText(file);
     reader.readAsBinaryString(file);
-//    clearFilePath();
 }
 
 function clearFilePath() {
@@ -171,6 +170,23 @@ function formatDefinition(text) {
     text2 = text2.substring(0,begin) + "<span>" + text2.substring(begin + 1,end) + "</span>" +text2.substring(end + 1,text2.length) ;
 
     return text2;
+}
+
+function setProgressVisible() {
+    var progressDiv = document.getElementsByClassName("progressBar")[0];
+    var visibility = progressDiv.style.visibility;
+    progressDiv.style.visibility = "visible";
+}
+
+function setProgressHidden() {
+    var progressDiv = document.getElementsByClassName("progressBar")[0];
+    var visibility = progressDiv.style.visibility;
+    progressDiv.style.visibility = "hidden";
+}
+
+function setBookLang(lang) {
+    var item = document.getElementsByClassName("bookLang")[0];
+    item.innerHTML = "The book " + document.getElementById("file-input").value + " is written in " + lang + ". These are the most popular words in this book:"
 }
 
 
