@@ -21,9 +21,8 @@ public class EnglishLexicon {
     final String hostName = "https://top-words.herokuapp.com/";
     final String hostName2 = "http://localhost:8081/";
 
-    final String fileForBeginner = hostName2 + "top_100_popular_words.txt";
-    final String fileForIntermediate = hostName2 + "top_1000_popular_words.txt";
-    final String fileOfEnglishLexicon = hostName2 + "Canonical_English_lexicon.txt";
+    final String fileForIntermediate = hostName + "top_1000_popular_words.txt";
+    final String fileOfEnglishLexicon = hostName + "Canonical_English_lexicon.txt";
     final String fileOfDict = hostName + "dictionary.txt";
 
 
