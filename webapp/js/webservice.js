@@ -67,7 +67,7 @@ function readSingleFile(e) {
         request.send(JSON.stringify(Book));
 
         request.onreadystatechange = function() { // (3)
-            if (request.readyState != 4) {
+            if (request.readyState != 4 && request.responseText != "" ) {
                 var input = JSON.parse(request.responseText);
                 var array = input.contents;
                 var lang = input.language;
